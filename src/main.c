@@ -1,26 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <pthread.h>
 
-int main() {
-    // long count = 10000000;
-    long count = 100000000;
-    srand(time(NULL));
-
-    long numbers[11];
-    float percentage[11];
-
-    for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++)
-        numbers[i] = 0;
-
-    // random number calculation
-    clock_t start_time = clock();
-
+void generator(long *numbers, long count) {
     for (size_t i = 0; i < count; i++)
     {
         int num = ((rand() % 6) + 1) + ((rand() % 6) + 1);
         numbers[num - 2]++;
     }
+}
+
+int main() {
+    // long count = 10000000;
+    long count = 100000000;
+    int threads = 10;
+    long per_thread_count = count / threads;
+    srand(time(NULL));
+
+    long numbers[11] = {0};
+    float percentage[11] = {0};
+
+    // random number calculation
+    clock_t start_time = clock();
+
+    generator(numbers, per_thread_count);
+    generator(numbers, per_thread_count);
 
     clock_t end_time = clock();
     double time = ((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1000;
