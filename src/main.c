@@ -5,6 +5,7 @@
 int main() {
     // long count = 10000000;
     long count = 100000000;
+    srand(time(NULL));
 
     long numbers[11];
     float percentage[11];
