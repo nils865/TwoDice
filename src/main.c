@@ -20,7 +20,7 @@ int main() {
         percentage[i] = ((float)numbers[i] / (float)count) * 100;
 
     for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++)
-        printf("%ld: %ld, %f %\n", (i + 2), numbers[i], percentage[i]);
+        printf("%ld: %ld, %.2f%%\n", (i + 2), numbers[i], percentage[i]);
     
     return 0;
 }
