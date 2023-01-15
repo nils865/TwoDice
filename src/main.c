@@ -47,12 +47,12 @@ int main() {
     for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++)
         printf("%ld: %ld, %.2f%%\n", (i + 2), numbers[i], percentage[i]);
 
-    // if (time > 60000)
-    //     printf("\nThis took %.2f m with a sample size of %ld\n", (time / 60000), count);
-    // else if (time > 1000)
-    //     printf("\nThis took %.2f s with a sample size of %ld\n", (time / 1000), count);
-    // else
-    printf("\nThis took %.0f ms with a sample size of %ld\n", time, count);
+    if (time > 60000)
+        printf("\nThis took %.2f m with a sample size of %ld\n", (time / 60000), count);
+    else if (time > 1000)
+        printf("\nThis took %.2f s with a sample size of %ld\n", (time / 1000), count);
+    else
+        printf("\nThis took %.0f ms with a sample size of %ld\n", time, count);
 
     return 0;
 }
