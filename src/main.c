@@ -3,8 +3,15 @@
 #include <time.h>
 #include <pthread.h>
 
-void generator(long *numbers, long count) {
-    for (size_t i = 0; i < count; i++)
+// long count = 10000000;
+long count = 100000000;
+int threads = 5;
+long numbers[11] = {0};
+
+void *generator() {
+    long current_count = count / threads;
+
+    for (size_t i = 0; i < current_count; i++)
     {
         int num = ((rand() % 6) + 1) + ((rand() % 6) + 1);
         numbers[num - 2]++;
@@ -12,20 +19,20 @@ void generator(long *numbers, long count) {
 }
 
 int main() {
-    // long count = 10000000;
-    long count = 100000000;
-    int threads = 10;
-    long per_thread_count = count / threads;
+    float percentage[11] = {0};
+
     srand(time(NULL));
 
-    long numbers[11] = {0};
-    float percentage[11] = {0};
+    pthread_t *tid = malloc(threads * sizeof(pthread_t));
 
     // random number calculation
     clock_t start_time = clock();
 
-    generator(numbers, per_thread_count);
-    generator(numbers, per_thread_count);
+    for (size_t i = 0; i < threads; i++)
+        pthread_create(&tid[i], NULL, generator, NULL);
+
+    for (size_t i = 0; i < threads; i++)
+        pthread_join(tid[i], NULL);
 
     clock_t end_time = clock();
     double time = ((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1000;
