@@ -6,11 +6,11 @@
 // long count = 10000000;
 long count = 1000000000;
 int threads = 6;
-long numbers[11] = {0};
 
 void *generator() {
     long current_count = count / threads;
     long counter = 0;
+    long numbers[11] = {0};
 
     for (size_t i = 0; i < current_count; i++)
     {
@@ -23,6 +23,7 @@ void *generator() {
 }
 
 int main() {
+    long numbers[11] = {0};
     float percentage[11] = {0};
 
     srand(time(NULL));
