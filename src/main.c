@@ -7,19 +7,29 @@
 long count = 1000000000;
 int threads = 6;
 
+typedef struct {
+    long numbers[11];
+} OUTPUT;
+
 void *generator() {
     long current_count = count / threads;
     long counter = 0;
-    long numbers[11] = {0};
+
+    OUTPUT *out = malloc(sizeof(OUTPUT));
+
+    for (size_t i = 0; i < sizeof(out->numbers) / sizeof(out->numbers[0]); i++)
+        out->numbers[i] = 0;    
 
     for (size_t i = 0; i < current_count; i++)
     {
         int num = ((rand() % 6) + 1) + ((rand() % 6) + 1);
-        numbers[num - 2]++;
+        out->numbers[num - 2]++;
         counter++;
     }
 
-    printf("Counter: %ld\n", counter);
+    printf("Current: 0: %d 1: %d\n", out->numbers[0], out->numbers[1]);
+
+    pthread_exit(out);
 }
 
 int main() {
@@ -36,8 +46,16 @@ int main() {
     for (size_t i = 0; i < threads; i++)
         pthread_create(&tid[i], NULL, generator, NULL);
 
-    for (size_t i = 0; i < threads; i++)
-        pthread_join(tid[i], NULL);
+    for (size_t i = 0; i < threads; i++) {
+        OUTPUT *out;
+
+        pthread_join(tid[i], &out);
+        
+        for (size_t i = 0; i < sizeof(numbers) / sizeof(numbers[0]); i++)
+            numbers[i] += out->numbers[i];        
+
+        free(out);
+    }
 
     clock_t end_time = clock();
     double time = (((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1000);
