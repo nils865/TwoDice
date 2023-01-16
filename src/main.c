@@ -27,8 +27,6 @@ void *generator() {
         counter++;
     }
 
-    printf("Current: 0: %d 1: %d\n", out->numbers[0], out->numbers[1]);
-
     pthread_exit(out);
 }
 
@@ -63,15 +61,19 @@ int main() {
     for (size_t i = 0; i < (sizeof(percentage) / sizeof(percentage[0])); i++) 
         percentage[i] = ((float)numbers[i] / (float)count) * 100;
 
-    for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++)
+    long sum = 0;
+
+    for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++) {
         printf("%ld: %ld, %.2f%%\n", (i + 2), numbers[i], percentage[i]);
+        sum += numbers[i];
+    }
 
     if (time > 60000)
-        printf("\nThis took %.2f m with a sample size of %ld\n", (time / 60000), count);
+        printf("\nThis took %.2f m with a sample size of %ld\n", (time / 60000), sum);
     else if (time > 1000)
-        printf("\nThis took %.2f s with a sample size of %ld\n", (time / 1000), count);
+        printf("\nThis took %.2f s with a sample size of %ld\n", (time / 1000), sum);
     else
-        printf("\nThis took %.0f ms with a sample size of %ld\n", time, count);
+        printf("\nThis took %.0f ms with a sample size of %ld\n", time, sum);
 
     return 0;
 }
