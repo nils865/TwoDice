@@ -5,4 +5,4 @@ A programm that rolls two random dice and calculates the chance of each output o
 TODO:
 
 - [X] Implementing Multithreading
-- [ ] Trying to make Multithreading not slower than singlethreading
+- [X] Trying to make Multithreading not slower than singlethreading
