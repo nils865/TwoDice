@@ -5,7 +5,7 @@
 
 // long long count = 10000000;
 long long count = 10000000000;
-int threads = 6;
+int threads = 16;
 
 typedef struct {
     long long numbers[11];

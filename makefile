@@ -1,6 +1,5 @@
 compile:
-	rm -rf build/TwoDice
-	gcc -o ./build/TwoDice ./src/main.c
+	gcc -o ./build/TwoDice ./src/main.c -Os -pthread
 
 run:
 	make compile
@@ -8,8 +7,7 @@ run:
 	build/TwoDice
 
 compile-windows:
-	del .\build\TwoDice
-	gcc -o .\build\TwoDice .\src\main.c -Os
+	gcc -o .\build\TwoDice .\src\main.c -Os -pthread
 
 run-windows:
 	make compile-windows
