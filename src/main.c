@@ -11,9 +11,15 @@ typedef struct {
     long long numbers[11];
 } OUTPUT;
 
-void *generator() {
+void *generator(void *pThreadName) {
     long long current_count = count / threads;
     long long counter = 0;
+    int *threadName = (int *) pThreadName;
+
+    srand(time(NULL) + &threadName);
+    printf("First Random: %d\n", rand());
+    srand(rand());
+    printf("Second Random: %d\n", rand());
 
     OUTPUT *out = malloc(sizeof(OUTPUT));
 
@@ -34,15 +40,13 @@ int main() {
     long long numbers[11] = {0};
     float percentage[11] = {0};
 
-    srand(time(NULL));
-
     pthread_t *tid = malloc(threads * sizeof(pthread_t));
 
     // random number calculation
     clock_t start_time = clock();
 
     for (size_t i = 0; i < threads; i++)
-        pthread_create(&tid[i], NULL, generator, NULL);
+        pthread_create(&tid[i], NULL, generator, (void *) i);
 
     for (size_t i = 0; i < threads; i++) {
         OUTPUT *out;

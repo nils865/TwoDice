@@ -2,6 +2,6 @@ compile:
 	gcc -o .\build\TwoDice .\src\main.c -Os -pthread
 
 run:
-	make compile-windows
+	make compile
 	echo ---------------------------
 	build/TwoDice
