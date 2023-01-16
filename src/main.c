@@ -3,17 +3,17 @@
 #include <time.h>
 #include <pthread.h>
 
-// long count = 10000000;
-long count = 1000000000;
+// long long count = 10000000;
+long long count = 10000000000;
 int threads = 6;
 
 typedef struct {
-    long numbers[11];
+    long long numbers[11];
 } OUTPUT;
 
 void *generator() {
-    long current_count = count / threads;
-    long counter = 0;
+    long long current_count = count / threads;
+    long long counter = 0;
 
     OUTPUT *out = malloc(sizeof(OUTPUT));
 
@@ -31,7 +31,7 @@ void *generator() {
 }
 
 int main() {
-    long numbers[11] = {0};
+    long long numbers[11] = {0};
     float percentage[11] = {0};
 
     srand(time(NULL));
@@ -61,19 +61,19 @@ int main() {
     for (size_t i = 0; i < (sizeof(percentage) / sizeof(percentage[0])); i++) 
         percentage[i] = ((float)numbers[i] / (float)count) * 100;
 
-    long sum = 0;
+    long long sum = 0;
 
     for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++) {
-        printf("%ld: %ld, %.2f%%\n", (i + 2), numbers[i], percentage[i]);
+        printf("%ld: %lli, %.2f%%\n", (i + 2), numbers[i], percentage[i]);
         sum += numbers[i];
     }
 
     if (time > 60000)
-        printf("\nThis took %.2f m with a sample size of %ld\n", (time / 60000), sum);
+        printf("\nThis took %.2f m with a sample size of %lli\n", (time / 60000), sum);
     else if (time > 1000)
-        printf("\nThis took %.2f s with a sample size of %ld\n", (time / 1000), sum);
+        printf("\nThis took %.2f s with a sample size of %lli\n", (time / 1000), sum);
     else
-        printf("\nThis took %.0f ms with a sample size of %ld\n", time, sum);
+        printf("\nThis took %.0f ms with a sample size of %lli\n", time, sum);
 
     return 0;
 }
