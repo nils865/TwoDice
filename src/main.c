@@ -3,23 +3,27 @@
 #include <time.h>
 #include <pthread.h>
 
-// long long count = 10000000;
-long long count = 10000000000;
-int threads = 16;
+typedef struct {
+    long long count;
+    int threads;
+} INFO;
 
 typedef struct {
     long long numbers[11];
 } OUTPUT;
 
-void *generator(void *pThreadName) {
-    long long current_count = count / threads;
-    long long counter = 0;
-    int *threadName = (int *) pThreadName;
+int threadID = 0;
 
-    srand(time(NULL) + &threadName);
-    printf("First Random: %d\n", rand());
+void *generator(void *information) {
+    INFO *info = (INFO *) information;
+
+    long long current_count = info->count / info->threads;
+    long long counter = 0;
+
+    printf("Sample: %lli, Threads: %d, ID: %d, Counter: %lli\n", info->count, info->threads, threadID, current_count);
+
+    srand(time(NULL) + threadID);
     srand(rand());
-    printf("Second Random: %d\n", rand());
 
     OUTPUT *out = malloc(sizeof(OUTPUT));
 
@@ -40,15 +44,23 @@ int main() {
     long long numbers[11] = {0};
     float percentage[11] = {0};
 
-    pthread_t *tid = malloc(threads * sizeof(pthread_t));
+    INFO info;
+    
+    printf("Sample size: ");
+    scanf("%lli", &info.count);
+    printf("Thread count: ");
+    scanf("%d", &info.threads);
+
+    pthread_t *tid = malloc(info.threads * sizeof(pthread_t));
 
     // random number calculation
     clock_t start_time = clock();
 
-    for (size_t i = 0; i < threads; i++)
-        pthread_create(&tid[i], NULL, generator, (void *) i);
+    for (size_t i = 0; i < info.threads; i++) {
+        pthread_create(&tid[i], NULL, generator, (void *) &info);
+    }
 
-    for (size_t i = 0; i < threads; i++) {
+    for (size_t i = 0; i < info.threads; i++) {
         OUTPUT *out;
 
         pthread_join(tid[i], &out);
@@ -63,7 +75,7 @@ int main() {
     double time = (((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1000);
 
     for (size_t i = 0; i < (sizeof(percentage) / sizeof(percentage[0])); i++) 
-        percentage[i] = ((float)numbers[i] / (float)count) * 100;
+        percentage[i] = ((float)numbers[i] / (float)info.count) * 100;
 
     long long sum = 0;
 

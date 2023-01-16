@@ -6,5 +6,5 @@ TODO:
 
 - [X] Implementing Multithreading
 - [X] Trying to make Multithreading not slower than singlethreading
-- [X] Add true randomness
-- [ ] Add a console based ui
+- [ ] Add true randomness
+- [X] Add a console based ui
