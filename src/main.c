@@ -4,8 +4,8 @@
 #include <pthread.h>
 
 // long count = 10000000;
-long count = 100000000;
-int threads = 10;
+long count = 1000000000;
+int threads = 6;
 long numbers[11] = {0};
 
 void *generator() {
@@ -39,7 +39,7 @@ int main() {
         pthread_join(tid[i], NULL);
 
     clock_t end_time = clock();
-    double time = (((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1000) / threads;
+    double time = (((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1000);
 
     for (size_t i = 0; i < (sizeof(percentage) / sizeof(percentage[0])); i++) 
         percentage[i] = ((float)numbers[i] / (float)count) * 100;
