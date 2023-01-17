@@ -6,23 +6,20 @@
 typedef struct {
     long long count;
     int threads;
+    int threadID;
 } INFO;
 
 typedef struct {
     long long numbers[11];
 } OUTPUT;
 
-int threadID = 0;
-
 void *generator(void *information) {
     INFO *info = (INFO *) information;
 
-    long long current_count = info->count / info->threads;
+    long long current_count = (*info).count / info->threads;
     long long counter = 0;
 
-    printf("Sample: %lli, Threads: %d, ID: %d, Counter: %lli\n", info->count, info->threads, threadID, current_count);
-
-    srand(time(NULL) + threadID);
+    srand(time(NULL) + info->threadID);
     srand(rand());
 
     OUTPUT *out = malloc(sizeof(OUTPUT));
@@ -57,7 +54,12 @@ int main() {
     clock_t start_time = clock();
 
     for (size_t i = 0; i < info.threads; i++) {
-        pthread_create(&tid[i], NULL, generator, (void *) &info);
+        INFO *current_info;
+        current_info = malloc(sizeof(INFO));
+        (*current_info).count = info.count;
+        (*current_info).threads = info.threads;
+        (*current_info).threadID = i;
+        pthread_create(&tid[i], NULL, generator, (void *) current_info);
     }
 
     for (size_t i = 0; i < info.threads; i++) {
