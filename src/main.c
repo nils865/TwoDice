@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <pthread.h>
+#include <string.h>
 
 typedef struct {
     long long count;
@@ -37,14 +38,41 @@ void *generator(void *information) {
     pthread_exit(out);
 }
 
-int main() {
+int main(int argc, char** argv) {
     long long numbers[11] = {0};
     float percentage[11] = {0};
 
     INFO info;
     
-    printf("Sample size: ");
-    scanf("%lli", &info.count);
+    printf("DEBUG: argc: %d, argv: ", argc);
+    for (size_t i = 0; i < argc; i++)
+    {
+        printf("%s", argv[i]);
+    }
+    printf("\n");
+    
+    if (argc > 1) {
+        if (!strcmp(argv[1], "-b")) {
+            info.count = 10000000;
+        } else if (!strcmp(argv[1], "-bc")) {
+            if (!strcmp(argv[2], "0")) {
+                printf("Sample size: ");
+                scanf("%lli", &info.count);
+            } else if (!strcmp(argv[2], "1"))
+                info.count = 10000000;
+            else if (!strcmp(argv[2], "2"))
+                info.count = 1000000000;
+            else if (!strcmp(argv[2], "3"))
+                info.count = 10000000000;
+            else
+                return 1;
+        } else
+            return 1;
+    } else {
+        printf("Sample size: ");
+        scanf("%lli", &info.count);
+    }
+
     printf("Thread count: ");
     scanf("%d", &info.threads);
 
@@ -80,10 +108,21 @@ int main() {
         percentage[i] = ((float)numbers[i] / (float)info.count) * 100;
 
     long long sum = 0;
+    
+    if (argc > 1) {
+        long long score = info.count / time;
+        sum = info.count;
 
-    for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++) {
-        printf("%ld: %lli, %.2f%%\n", (i + 2), numbers[i], percentage[i]);
-        sum += numbers[i];
+        if (!strcmp(argv[1], "-bc")) {
+            printf("You got a score of %lli in benchmark %s\n", score, argv[2]);
+        } else if (!strcmp(argv[1], "-b")) {
+            printf("You got a score of %lli in benchmark 1\n", score);
+        }
+    } else {
+        for (size_t i = 0; i < (sizeof(numbers) / sizeof(numbers[0])); i++) {
+            printf("%ld: %lli, %.2f%%\n", (i + 2), numbers[i], percentage[i]);
+            sum += numbers[i];
+        }
     }
 
     if (time > 60000)
