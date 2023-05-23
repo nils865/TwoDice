@@ -21,7 +21,7 @@ Example scores for Test 1:
 
 - Core i5-12600k with 16 Threads: 500.000
 - Ryzen 5 5600X with 12 Threads 357.142
-- Core i7-477k with 8 Threads: 156.25ß
+- Core i7-4770k with 8 Threads: 156.250
 - Core i7-3770 with 8 Threads: 156.250
 - Ryzen 5 4500U with 6 Threads: 136.986
 
